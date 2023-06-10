@@ -11,8 +11,37 @@
 
     {% if is_user_login %}
         <a href="{% url 'logout_view' %}">Logout</a>
+        <br><br>
+
+        {% comment %} PostBody {% endcomment %}
+
+        {% for obj in user_posts_query %}
+        <hr>
+        <div class="post container">
+            <div class="post-header">
+                <div class="user-profile">
+                    <img src="{{ obj.user.user_profile_models_user.profile_pic.url }}" alt="User Profile Picture" class="profile-pic" height="20px" width="20px">
+                    <span class="username">{{ obj.user.username }}</span>
+                </div>
+                {% if request.user == obj.user %}
+                <p class="created-time">Posted on, {{ obj.created_at }} <a href="{% url 'delete-post' obj.id %}">delete post</a>
+                    <a href="{% url 'update-post' obj.id %}">update post</a></p>
+                {% else %}
+                <p class="created-time">Posted on, {{ obj.created_at }}</p>
+                {% endif %}
+            </div>
+            <h2 class="post-title">{{ obj.title }}</h2>
+            <img src="{{ obj.media.url }}" alt="Post Image" class="post-image" height="200px" width="500px">
+            <div class="post-content">
+                <p class="image-description"></p>
+                <p class="post-text">{{ obj.description }}</p>
+            </div>
+        </div>
+        <hr>
+        {% endfor %}
     {% else %}
-        <a href="{% url 'logout_view' %}">Login</a>
+        <a href="{% url 'login_view' %}">Login</a>
+
     {% endif %}
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
